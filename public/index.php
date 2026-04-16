@@ -15,6 +15,7 @@ $routes = [
     'inventory' => ['InventoryController', 'index'],
     'visits' => ['VisitsController', 'index'],
     'consultations' => ['ConsultationsController', 'index'],
+    'consultations/patient-search' => ['ConsultationsController', 'patientSearch'],
     'borrowing' => ['BorrowingController', 'index'],
     'first-aid' => ['FirstAidController', 'index'],
 ];

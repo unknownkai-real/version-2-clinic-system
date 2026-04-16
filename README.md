@@ -47,3 +47,8 @@ WHERE username = 'admin';
 - Borrowing of equipment logs
 - First aid records with diagnosis shown in modal only
 - Flash messages, search bars, record highlighting
+
+
+## Upgrade existing database
+If your existing DB already has old consultation fields, run:
+`database/alter_consultations_and_records.sql`

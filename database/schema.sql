@@ -36,23 +36,42 @@ CREATE TABLE employees (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE vaccinations (
+CREATE TABLE student_labs (
   id INT AUTO_INCREMENT PRIMARY KEY,
   student_id INT NOT NULL,
-  vaccine_name VARCHAR(120) NOT NULL,
-  dose VARCHAR(30) NULL,
-  date_administered DATE NULL,
+  lab_type VARCHAR(120) NOT NULL,
+  record_date DATE NOT NULL,
+  file_path VARCHAR(255) NULL,
+  result_summary TEXT NULL,
+  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+);
+
+CREATE TABLE student_vaccinations (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  student_id INT NOT NULL,
+  dose ENUM('1st','2nd','3rd') NOT NULL,
+  record_date DATE NOT NULL,
+  file_path VARCHAR(255) NULL,
+  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+);
+
+CREATE TABLE student_drug_tests (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  student_id INT NOT NULL,
+  record_date DATE NOT NULL,
+  result VARCHAR(120) NOT NULL,
   notes TEXT NULL,
   FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 );
 
-CREATE TABLE lab_results (
+CREATE TABLE employee_health_records (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  student_id INT NOT NULL,
-  test_type VARCHAR(120) NOT NULL,
-  result VARCHAR(255) NULL,
-  test_date DATE NULL,
-  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+  employee_id INT NOT NULL,
+  record_type ENUM('Physical Exam','Drug Test','Dental Benefits') NOT NULL,
+  record_date DATE NOT NULL,
+  results TEXT NOT NULL,
+  notes TEXT NULL,
+  FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE
 );
 
 CREATE TABLE inventory (
@@ -65,6 +84,14 @@ CREATE TABLE inventory (
   batch_no VARCHAR(80) NULL,
   notes TEXT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE damaged_items (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  item_name VARCHAR(120) NOT NULL,
+  description TEXT NULL,
+  quantity INT NOT NULL,
+  record_date DATE NOT NULL
 );
 
 CREATE TABLE visits (
@@ -83,16 +110,13 @@ CREATE TABLE visits (
 
 CREATE TABLE consultations (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  student_id INT NULL,
-  employee_id INT NULL,
-  consultation_date DATE NOT NULL,
+  consult_datetime DATETIME NOT NULL,
+  patient_id INT NOT NULL,
+  patient_type ENUM('Student','Employee') NOT NULL,
   complaint TEXT NOT NULL,
-  diagnosis TEXT NOT NULL,
-  treatment TEXT NULL,
-  confidential_notes TEXT NULL,
-  CONSTRAINT chk_consult_patient CHECK ((student_id IS NOT NULL AND employee_id IS NULL) OR (student_id IS NULL AND employee_id IS NOT NULL)),
-  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE SET NULL,
-  FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE SET NULL
+  intervention TEXT NULL,
+  disposition VARCHAR(150) NULL,
+  private_notes TEXT NULL
 );
 
 CREATE TABLE borrowing_logs (
@@ -117,6 +141,26 @@ CREATE TABLE first_aid_records (
   CONSTRAINT chk_firstaid_patient CHECK ((student_id IS NOT NULL AND employee_id IS NULL) OR (student_id IS NULL AND employee_id IS NOT NULL)),
   FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE SET NULL,
   FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE SET NULL
+);
+
+-- compatibility tables retained
+CREATE TABLE vaccinations (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  student_id INT NOT NULL,
+  vaccine_name VARCHAR(120) NOT NULL,
+  dose VARCHAR(30) NULL,
+  date_administered DATE NULL,
+  notes TEXT NULL,
+  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+);
+
+CREATE TABLE lab_results (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  student_id INT NOT NULL,
+  test_type VARCHAR(120) NOT NULL,
+  result VARCHAR(255) NULL,
+  test_date DATE NULL,
+  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 );
 
 INSERT INTO users (full_name, username, password) VALUES

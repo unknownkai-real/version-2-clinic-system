@@ -2,8 +2,6 @@
 require_once __DIR__ . '/../core/Controller.php';
 require_once __DIR__ . '/../core/Auth.php';
 require_once __DIR__ . '/../models/Consultation.php';
-require_once __DIR__ . '/../models/Student.php';
-require_once __DIR__ . '/../models/Employee.php';
 
 class ConsultationsController extends Controller
 {
@@ -29,8 +27,16 @@ class ConsultationsController extends Controller
 
         $search = trim($_GET['search'] ?? '');
         $consultations = $model->all($search);
-        $students = (new Student())->all();
-        $employees = (new Employee())->all();
-        $this->view('consultations/index', compact('consultations', 'students', 'employees', 'search'));
+        $this->view('consultations/index', compact('consultations', 'search'));
+    }
+
+    public function patientSearch(): void
+    {
+        Auth::requireAuth();
+        $type = $_GET['patient_type'] ?? 'Student';
+        $q = trim($_GET['q'] ?? '');
+        $result = (new Consultation())->searchPatients($type, $q);
+        header('Content-Type: application/json');
+        echo json_encode($result);
     }
 }
