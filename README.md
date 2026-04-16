@@ -29,6 +29,14 @@ version-2-clinic-system/
    - Username: `admin`
    - Password: `admin123`
 
+If you already imported an older build with a bad admin hash, run:
+
+```sql
+UPDATE users
+SET password = '$2y$12$HrdADg23NCICJYT6IoUyC.n60Bgnfr5pjOKy7w2kp3rNUELqpRDt.'
+WHERE username = 'admin';
+```
+
 ## Implemented Modules
 - Authentication with password hashing + sessions
 - Student health records (CRUD + modal history)
@@ -39,4 +47,3 @@ version-2-clinic-system/
 - Borrowing of equipment logs
 - First aid records with diagnosis shown in modal only
 - Flash messages, search bars, record highlighting
-

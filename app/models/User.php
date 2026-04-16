@@ -12,4 +12,10 @@ class User extends Model
 
         return $user ?: null;
     }
+
+    public function updatePassword(int $id, string $passwordHash): bool
+    {
+        $stmt = $this->db->prepare('UPDATE users SET password = ? WHERE id = ?');
+        return $stmt->execute([$passwordHash, $id]);
+    }
 }

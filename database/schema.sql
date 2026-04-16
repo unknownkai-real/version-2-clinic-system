@@ -120,5 +120,5 @@ CREATE TABLE first_aid_records (
 );
 
 INSERT INTO users (full_name, username, password) VALUES
-('System Administrator', 'admin', '$2y$10$R5P5/XwzCROTx8Jx85TRW.k6v52Nmnif6xvYIh9n6D6M7UAuRdR8K');
+('System Administrator', 'admin', '$2y$12$HrdADg23NCICJYT6IoUyC.n60Bgnfr5pjOKy7w2kp3rNUELqpRDt.');
 -- password: admin123
